@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHVANI - Multilingual Speech Recognition & Paragraph Translation</title>
+    <!-- Custom Stylesheet (No Bootstrap, No Tailwind) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2026">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Decorative Gradient Glow -->
+    <div class="top-glow"></div>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <div class="app-wrapper">
+        <!-- HEADER / HERO SECTION -->
+        <header class="header-section">
+            <div class="header-badge">
+                <span class="badge-dot"></span>
+                <span>AI-Powered Speech & NLP System</span>
+            </div>
+            <h1 class="logo-title">
+                <span class="brand-gradient">DHVANI</span>
+            </h1>
+            <p class="logo-subtitle">
+                A Real-Time Multilingual Speech Recognition and Paragraph Translation System
+            </p>
+            <p class="hero-explanation">
+                “Speak naturally in your preferred language, convert your speech into text in real time, organize it into meaningful paragraphs, and translate those paragraphs into another selected language.”
+            </p>
+            <div class="hero-actions">
+                <button id="hero-start-btn" class="btn btn-hero">
+                    <span class="btn-icon">🎙️</span>
+                    <span>Start Speaking</span>
+                </button>
+                <a href="#workspace" class="btn btn-secondary-outline">
+                    <span>Explore Workspace</span>
+                    <span class="btn-arrow">↓</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- MAIN WORKSPACE -->
+        <main id="workspace" class="main-container">
+
+            <!-- CARD 1: LANGUAGE SELECTION -->
+            <section class="card language-card" aria-label="Language Selection">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <span class="card-icon">🌐</span>
+                        <h2 class="card-title">Language Selection</h2>
+                    </div>
+                    <span class="card-hint">Choose your input speaking language and translation target</span>
+                </div>
+
+                <div class="language-selection-grid">
+                    <!-- Input Language Dropdown -->
+                    <div class="lang-selector-group">
+                        <label for="input-language" class="form-label">
+                            <span class="label-badge label-input">Input Language (Speech)</span>
+                        </label>
+                        <div class="select-wrapper">
+                            <select id="input-language" class="custom-select" aria-label="Select Input Language">
+                                <option value="en" data-speech="en-US" selected>English (English)</option>
+                                <option value="hi" data-speech="hi-IN">Hindi (हिन्दी)</option>
+                                <option value="kn" data-speech="kn-IN">Kannada (ಕನ್ನಡ)</option>
+                                <option value="ta" data-speech="ta-IN">Tamil (தமிழ்)</option>
+                                <option value="te" data-speech="te-IN">Telugu (తెలుగు)</option>
+                                <option value="ml" data-speech="ml-IN">Malayalam (മലയാളം)</option>
+                                <option value="mr" data-speech="mr-IN">Marathi (मराठी)</option>
+                                <option value="bn" data-speech="bn-IN">Bengali (বাংলা)</option>
+                                <option value="gu" data-speech="gu-IN">Gujarati (ગુજરાતી)</option>
+                                <option value="es" data-speech="es-ES">Spanish (Español)</option>
+                            </select>
+                            <span class="select-arrow">▼</span>
+                        </div>
+                        <span id="speech-code-tag" class="lang-code-hint">Speech Engine: en-US</span>
+                    </div>
+
+                    <!-- Swap Languages Button -->
+                    <div class="swap-btn-container">
+                        <button id="swap-languages-btn" class="btn btn-swap" title="Swap Input and Target Languages" aria-label="Swap Languages">
+                            <span class="swap-icon">⇄</span>
+                            <span class="swap-text">Swap Languages</span>
+                        </button>
+                    </div>
+
+                    <!-- Target Language Dropdown -->
+                    <div class="lang-selector-group">
+                        <label for="target-language" class="form-label">
+                            <span class="label-badge label-target">Target Language (Translation)</span>
+                        </label>
+                        <div class="select-wrapper">
+                            <select id="target-language" class="custom-select" aria-label="Select Target Language">
+                                <option value="en">English (English)</option>
+                                <option value="hi">Hindi (हिन्दी)</option>
+                                <option value="kn" selected>Kannada (ಕನ್ನಡ)</option>
+                                <option value="ta">Tamil (தமிழ்)</option>
+                                <option value="te">Telugu (తెలుగు)</option>
+                                <option value="ml">Malayalam (മലയാളം)</option>
+                                <option value="mr">Marathi (मराठी)</option>
+                                <option value="bn">Bengali (বাংলা)</option>
+                                <option value="gu">Gujarati (ગુજરાતી)</option>
+                                <option value="es">Spanish (Español)</option>
+                            </select>
+                            <span class="select-arrow">▼</span>
+                        </div>
+                        <span id="target-code-tag" class="lang-code-hint">Target Output: kn (Kannada)</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- WORKSPACE TWO-COLUMN / GRID LAYOUT -->
+            <div class="panels-grid">
+
+                <!-- CARD 2: SPEECH RECOGNITION (ORIGINAL SPEECH) -->
+                <section class="card speech-card" aria-label="Speech Recognition">
+                    <div class="card-header flex-header">
+                        <div class="card-title-group">
+                            <span class="card-icon">🎤</span>
+                            <h2 class="card-title">Speech Recognition</h2>
+                        </div>
+                        <!-- Live Status Badge -->
+                        <div id="status-pill" class="status-pill status-ready">
+                            <span class="status-indicator-dot"></span>
+                            <span id="status-text" class="status-label">Ready</span>
+                        </div>
+                    </div>
+
+                    <!-- Visual Audio Waves / Listening State Indicator -->
+                    <div id="audio-visualizer" class="audio-visualizer" aria-hidden="true">
+                        <div class="wave-bar bar-1"></div>
+                        <div class="wave-bar bar-2"></div>
+                        <div class="wave-bar bar-3"></div>
+                        <div class="wave-bar bar-4"></div>
+                        <div class="wave-bar bar-5"></div>
+                        <div class="wave-bar bar-6"></div>
+                        <div class="wave-bar bar-7"></div>
+                    </div>
+
+                    <!-- Speech Recognition Controls -->
+                    <div class="button-toolbar">
+                        <button id="start-btn" class="btn btn-primary">
+                            <span class="mic-circle">
+                                <span class="btn-icon">🎤</span>
+                            </span>
+                            <span>Start Speaking</span>
+                        </button>
+                        <button id="stop-btn" class="btn btn-danger" disabled>
+                            <span class="btn-icon">⏹</span>
+                            <span>Stop</span>
+                        </button>
+                        <button id="demo-speech-btn" class="btn btn-secondary" title="Simulate speaking natural sentences into paragraphs">
+                            <span class="btn-icon">✨</span>
+                            <span>Test Sample Speech</span>
+                        </button>
+                        <button id="clear-btn" class="btn btn-ghost" title="Clear all text and reset">
+                            <span class="btn-icon">🗑️</span>
+                            <span>Clear</span>
+                        </button>
+                    </div>
+
+                    <!-- Speech Recognition Network Diagnostics & Resolution Card -->
+                    <div id="network-troubleshoot-box" class="troubleshoot-box" style="display: none;">
+                        <div class="troubleshoot-header">
+                            <div class="troubleshoot-title-group">
+                                <span class="troubleshoot-icon">⚠️</span>
+                                <h4 class="troubleshoot-title">Fixing "Network Connection Problem"</h4>
+                            </div>
+                            <button id="close-troubleshoot-btn" class="troubleshoot-close" type="button" title="Dismiss" aria-label="Close">&times;</button>
+                        </div>
+                        <div class="troubleshoot-body">
+                            <p class="troubleshoot-intro">
+                                Browser speech recognition streams audio to Google's speech cloud. If your browser or Wi-Fi temporarily rejects that stream, apply these 4 fast solutions:
+                            </p>
+                            <ul class="troubleshoot-tips">
+                                <li>
+                                    <strong>1. Use <code>localhost</code> instead of <code>127.0.0.1</code>:</strong>
+                                    Chrome's security policy requires a secure origin.
+                                    <a id="switch-localhost-link" href="http://localhost:5000" class="troubleshoot-link">👉 Click here to switch to http://localhost:5000</a>
+                                </li>
+                                <li>
+                                    <strong>2. Recommended Browsers:</strong>
+                                    Use standard <strong>Google Chrome</strong> or <strong>Microsoft Edge</strong>. <em>(Note: Brave browser disables Google speech services by default; if using Brave, enable Google services under settings or open in Chrome)</em>.
+                                </li>
+                                <li>
+                                    <strong>3. Windows Microphone Privacy:</strong>
+                                    Open Windows <em>Settings &gt; Privacy & Security &gt; Microphone</em> &rarr; ensure <strong>"Let desktop apps access your microphone"</strong> is <strong>ON</strong>.
+                                </li>
+                                <li>
+                                    <strong>4. VPN / College Wi-Fi Firewall:</strong>
+                                    If your Wi-Fi or VPN blocks speech WebSockets, disconnect VPN or test via a mobile hotspot.
+                                </li>
+                            </ul>
+                            <div class="troubleshoot-footer">
+                                <button id="troubleshoot-retry-btn" class="btn btn-secondary btn-sm" type="button">🔄 Retry Speaking</button>
+                                <span class="troubleshoot-subtext">💡 Note: You can also switch to the <strong>Raw Text</strong> tab below to type/paste text directly and translate!</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content Header & View Mode Switcher -->
+                    <div class="content-header">
+                        <div class="section-label-group">
+                            <h3 class="section-heading">ORIGINAL SPEECH</h3>
+                            <span class="section-subtext">Recognized sentences organized into paragraphs</span>
+                        </div>
+                        <div class="view-toggle">
+                            <button id="view-paragraphs-btn" class="view-btn active" title="Show structured paragraphs">Paragraphs</button>
+                            <button id="view-raw-btn" class="view-btn" title="Show raw transcribed speech">Raw Text</button>
+                        </div>
+                    </div>
+
+                    <!-- Recognized Speech Box (Structured Paragraphs View) -->
+                    <div id="paragraphs-container" class="output-box paragraph-view-box">
+                        <div id="placeholder-speech" class="placeholder-content">
+                            <div class="placeholder-icon">🎙️</div>
+                            <p class="placeholder-text">Your recognized speech appears here.</p>
+                            <p class="placeholder-subtext">Click <strong>Start Speaking</strong> and talk naturally into your microphone.</p>
+                        </div>
+                        <div id="paragraph-list" class="paragraph-list" style="display: none;"></div>
+                    </div>
+
+                    <!-- Raw Textarea (Available when Raw Text toggle is selected or for manual editing) -->
+                    <div id="raw-container" class="raw-container" style="display: none;">
+                        <textarea id="raw-speech-textarea" class="raw-textarea" placeholder="Recognized speech in plain text..." rows="8"></textarea>
+                    </div>
+
+                    <!-- Interim live speech preview (shows while user is speaking) -->
+                    <div id="interim-preview" class="interim-preview" style="display: none;">
+                        <span class="interim-label">Listening:</span>
+                        <span id="interim-text" class="interim-text">...</span>
+                    </div>
+
+                    <!-- Card Footer Statistics -->
+                    <div class="card-footer">
+                        <span id="speech-stats" class="text-counter">0 words • 0 characters • 0 paragraphs</span>
+                        <button id="copy-speech-btn" class="btn-text-action" title="Copy original speech">
+                            📋 Copy Original
+                        </button>
+                    </div>
+                </section>
+
+
+                <!-- CARD 3: TRANSLATION (TRANSLATED PARAGRAPH) -->
+                <section class="card translation-card" aria-label="Paragraph Translation">
+                    <div class="card-header flex-header">
+                        <div class="card-title-group">
+                            <span class="card-icon">🌐</span>
+                            <h2 class="card-title">Translation</h2>
+                        </div>
+                        <span id="target-badge" class="target-badge">Kannada (ಕನ್ನಡ)</span>
+                    </div>
+
+                    <!-- Translation Controls -->
+                    <div class="button-toolbar">
+                        <button id="translate-btn" class="btn btn-success">
+                            <span class="btn-icon">⚡</span>
+                            <span>Translate</span>
+                        </button>
+                        <button id="copy-translation-btn" class="btn btn-secondary" title="Copy translated text to clipboard">
+                            <span class="btn-icon">📋</span>
+                            <span>Copy Translation</span>
+                        </button>
+                        <button id="speak-translation-btn" class="btn btn-ghost" title="Read translated paragraph aloud">
+                            <span class="btn-icon">🔊</span>
+                            <span>Listen</span>
+                        </button>
+                    </div>
+
+                    <!-- Translation Section Header -->
+                    <div class="content-header">
+                        <div class="section-label-group">
+                            <h3 class="section-heading">TRANSLATED PARAGRAPH</h3>
+                            <span class="section-subtext">Multi-lingual sentence & paragraph translation</span>
+                        </div>
+                    </div>
+
+                    <!-- Translated Paragraph Output Box -->
+                    <div id="translation-container" class="output-box translation-view-box">
+                        <div id="placeholder-translation" class="placeholder-content">
+                            <div class="placeholder-icon">🌐</div>
+                            <p class="placeholder-text">Your translated paragraph appears here.</p>
+                            <p class="placeholder-subtext">Click <strong>Translate</strong> after speaking or entering speech text.</p>
+                        </div>
+                        <div id="translation-list" class="paragraph-list" style="display: none;"></div>
+                    </div>
+
+                    <!-- Loading State Overlay -->
+                    <div id="translation-loading" class="translation-loading" style="display: none;">
+                        <div class="loading-spinner"></div>
+                        <p class="loading-text">Translating paragraphs via backend...</p>
+                    </div>
+
+                    <!-- Translation Card Footer -->
+                    <div class="card-footer">
+                        <span id="translation-stats" class="text-counter">0 words • 0 characters</span>
+                        <span id="engine-info" class="engine-info">Backend: Flask / NLP Service</span>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- FEATURE HIGHLIGHTS / EDUCATIONAL ARCHITECTURE -->
+            <section class="card architecture-card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <span class="card-icon">⚙️</span>
+                        <h2 class="card-title">How Dhvani Works</h2>
+                    </div>
+                    <span class="card-hint">System pipeline overview for presentation & review</span>
+                </div>
+                <div class="flow-steps-grid">
+                    <div class="flow-step">
+                        <div class="step-num">1</div>
+                        <div class="step-icon">🎙️</div>
+                        <h4>Speech Capture</h4>
+                        <p>User speaks into mic; Browser Web Speech API captures audio waveforms with chosen dialect code.</p>
+                    </div>
+                    <div class="flow-step-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="step-num">2</div>
+                        <div class="step-icon">📝</div>
+                        <h4>Real-Time Transcription</h4>
+                        <p>Speech is converted to text tokens in real time with continuous interim and final result handling.</p>
+                    </div>
+                    <div class="flow-step-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="step-num">3</div>
+                        <div class="step-icon">📑</div>
+                        <h4>Paragraph Formation</h4>
+                        <p>Boundary detection and pauses group continuous sentences into formatted, readable paragraphs.</p>
+                    </div>
+                    <div class="flow-step-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="step-num">4</div>
+                        <div class="step-icon">🌐</div>
+                        <h4>Flask Translation</h4>
+                        <p>Backend REST API receives paragraphs, invokes the translation engine, and returns multilingual text.</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="app-footer">
+            <div class="footer-content">
+                <p class="footer-title"><strong>DHVANI</strong> — Multilingual Speech Recognition & Paragraph Translation System</p>
+                <p class="footer-tech">
+                    Built with HTML5 • Vanilla CSS • Vanilla JavaScript • Python Flask • Web Speech API
+                </p>
+                <p class="footer-note">College Project Demonstration Edition</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Application Script -->
+    <script src="{{ url_for('static', filename='js/script.js') }}?v=2026"></script>
+</body>
+</html>
