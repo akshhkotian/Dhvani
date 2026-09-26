@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DHVANI - Multilingual Speech Recognition & Paragraph Translation</title>
     <!-- Custom Stylesheet (No Bootstrap, No Tailwind) -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2026">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2026-lavender">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -18,6 +18,24 @@
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
     <div class="app-wrapper">
+        <!-- TOP NAVIGATION BAR -->
+        <nav class="app-navbar" aria-label="Main Navigation">
+            <div class="nav-brand">
+                <span class="nav-brand-icon">🎙️</span>
+                <span class="nav-brand-title">DHVANI</span>
+            </div>
+            <div class="nav-links-wrapper">
+                <a href="#workspace" class="nav-link active">Studio</a>
+                <a href="#speech-card" class="nav-link">Speech</a>
+                <a href="#translation-card" class="nav-link">Translation</a>
+                <a href="#how-it-works" class="nav-link">Architecture</a>
+            </div>
+            <div class="nav-pill-badge">
+                <span class="nav-pill-dot"></span>
+                <span>System Ready</span>
+            </div>
+        </nav>
+
         <!-- HEADER / HERO SECTION -->
         <header class="header-section">
             <div class="header-badge">
@@ -119,7 +137,7 @@
             <div class="panels-grid">
 
                 <!-- CARD 2: SPEECH RECOGNITION (ORIGINAL SPEECH) -->
-                <section class="card speech-card" aria-label="Speech Recognition">
+                <section id="speech-card" class="card speech-card" aria-label="Speech Recognition">
                     <div class="card-header flex-header">
                         <div class="card-title-group">
                             <span class="card-icon">🎤</span>
@@ -248,7 +266,7 @@
 
 
                 <!-- CARD 3: TRANSLATION (TRANSLATED PARAGRAPH) -->
-                <section class="card translation-card" aria-label="Paragraph Translation">
+                <section id="translation-card" class="card translation-card" aria-label="Paragraph Translation">
                     <div class="card-header flex-header">
                         <div class="card-title-group">
                             <span class="card-icon">🌐</span>
@@ -307,7 +325,7 @@
             </div>
 
             <!-- FEATURE HIGHLIGHTS / EDUCATIONAL ARCHITECTURE -->
-            <section class="card architecture-card">
+            <section id="how-it-works" class="card architecture-card">
                 <div class="card-header">
                     <div class="card-title-group">
                         <span class="card-icon">⚙️</span>
@@ -361,6 +379,6 @@
     </div>
 
     <!-- Application Script -->
-    <script src="{{ url_for('static', filename='js/script.js') }}?v=2026"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}?v=2026-lavender"></script>
 </body>
 </html>

@@ -42,6 +42,20 @@
     --shadow-md: 0 4px 14px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -2px rgba(15, 23, 42, 0.04);
     --shadow-lg: 0 12px 28px -4px rgba(15, 23, 42, 0.1), 0 4px 10px -2px rgba(15, 23, 42, 0.05);
     --shadow-glow: 0 0 24px var(--primary-glow);
+
+    /* Subtle Lavender Navigation Theme */
+    --nav-bg: #F7F5FB;                   /* Soft and light navigation background */
+    --nav-text: #3D3155;                 /* Dark lavender text */
+    --lavender-main: #9B8AC4;            /* Main glow lavender */
+    --lavender-soft: #C8B6E8;            /* Soft lavender secondary glow */
+    --lavender-hover: #B39DDB;           /* Hover lavender */
+    --nav-active-bg: #FFFFFF;            /* Active navigation background */
+    
+    /* Subtle Soft Lavender Glow - Multi-tier diffuse blur, very low opacity, gently fading outward */
+    --nav-soft-glow: 
+        0 2px 8px 0 rgba(155, 138, 196, 0.16),
+        0 5px 16px 2px rgba(200, 182, 232, 0.20),
+        0 8px 26px 4px rgba(155, 138, 196, 0.08);
     
     --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -86,6 +100,107 @@ body {
     max-width: 1240px;
     margin: 0 auto;
     padding: 2rem 1.5rem 4rem;
+}
+
+/* ===================================================================
+   TOP NAVIGATION BAR (LAVENDER GLOW THEME)
+   =================================================================== */
+
+.app-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 1.25rem;
+    margin-bottom: 2rem;
+    background-color: var(--nav-bg);
+    border-radius: var(--radius-full);
+    border: none;
+    box-shadow: 0 2px 14px rgba(155, 138, 196, 0.08);
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: var(--nav-text);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+}
+
+.nav-brand-icon {
+    font-size: 1.25rem;
+}
+
+.nav-brand-title {
+    background: linear-gradient(135deg, #3D3155 0%, #6366f1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.nav-links-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: var(--nav-bg);
+    padding: 4px;
+    border-radius: var(--radius-full);
+    border: none;
+}
+
+.nav-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--nav-text);
+    text-decoration: none;
+    border: none !important;
+    outline: none;
+    border-radius: var(--radius-full);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.72;
+}
+
+.nav-link:hover {
+    color: var(--nav-text);
+    opacity: 1;
+    background-color: rgba(179, 157, 219, 0.18); /* Hover lavender #B39DDB at low opacity */
+}
+
+.nav-link.active {
+    border: none !important;
+    outline: none;
+    background-color: var(--nav-active-bg); /* Clean soft white #FFFFFF */
+    color: var(--nav-text) !important;      /* Dark lavender text #3D3155 */
+    font-weight: 600;
+    opacity: 1;
+    box-shadow: var(--nav-soft-glow);       /* Subtle lavender soft glow fading outward */
+}
+
+.nav-pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    background-color: #FFFFFF;
+    border-radius: var(--radius-full);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--nav-text);
+    box-shadow: 0 1px 6px rgba(155, 138, 196, 0.12);
+    border: none;
+}
+
+.nav-pill-dot {
+    width: 7px;
+    height: 7px;
+    background-color: #10b981;
+    border-radius: 50%;
 }
 
 /* ===================================================================
@@ -696,28 +811,55 @@ body {
 
 .view-toggle {
     display: inline-flex;
-    background-color: var(--surface-alt);
-    border-radius: var(--radius-sm);
-    padding: 3px;
-    gap: 2px;
+    background-color: var(--nav-bg); /* Soft, light navigation background #F7F5FB */
+    border-radius: var(--radius-full);
+    padding: 4px;
+    gap: 4px;
+    border: none !important;
 }
 
 .view-btn {
-    border: none;
+    border: none !important;
+    outline: none !important;
     background: transparent;
-    padding: 3px 10px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    border-radius: 5px;
+    padding: 5px 14px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border-radius: var(--radius-full);
     cursor: pointer;
-    color: var(--text-secondary);
-    transition: var(--transition);
+    color: var(--nav-text); /* Dark lavender text #3D3155 */
+    opacity: 0.72;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.view-btn:hover {
+    color: var(--nav-text);
+    opacity: 1;
+    background-color: rgba(179, 157, 219, 0.18); /* Hover lavender #B39DDB at low opacity */
 }
 
 .view-btn.active {
-    background-color: var(--surface-card);
-    color: var(--primary);
-    box-shadow: var(--shadow-sm);
+    border: none !important;
+    outline: none !important;
+    background-color: var(--nav-active-bg); /* Clean soft white #FFFFFF */
+    color: var(--nav-text) !important;      /* Dark lavender text #3D3155 */
+    font-weight: 600;
+    opacity: 1;
+    /* Very subtle soft lavender glow: #9B8AC4 main, #C8B6E8 secondary, fading outward without outline */
+    box-shadow: var(--nav-soft-glow);
+}
+
+/* Universal Soft Lavender Glow for any active navigation option */
+.nav-option.active,
+.nav-item.active,
+.tab-btn.active {
+    border: none !important;
+    outline: none !important;
+    background-color: var(--nav-active-bg) !important;
+    color: var(--nav-text) !important;
+    font-weight: 600 !important;
+    opacity: 1 !important;
+    box-shadow: var(--nav-soft-glow) !important;
 }
 
 /* Output Display Boxes */
@@ -1205,5 +1347,24 @@ body {
     
     .logo-title {
         font-size: 2.25rem;
+    }
+
+    .app-navbar {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        border-radius: var(--radius-md);
+    }
+
+    .nav-links-wrapper {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .nav-link {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.8rem;
     }
 }
