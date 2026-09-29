@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DHVANI - Multilingual Speech Recognition & Paragraph Translation</title>
-    <!-- Custom Stylesheet (No Bootstrap, No Tailwind) -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2026-lavender">
+    <title>DHVANI - Multilingual Speech Recognition, Video Transcription & Translation</title>
+    <!-- Custom Stylesheet (Pure CSS - No Bootstrap, No Tailwind) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2026-v2-lavender">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -26,8 +26,9 @@
             </div>
             <div class="nav-links-wrapper">
                 <a href="#workspace" class="nav-link active">Studio</a>
-                <a href="#speech-card" class="nav-link">Speech</a>
+                <a href="#speech-card" class="nav-link">Speech / Video</a>
                 <a href="#translation-card" class="nav-link">Translation</a>
+                <a href="#transliteration-section" class="nav-link">Transliteration</a>
                 <a href="#how-it-works" class="nav-link">Architecture</a>
             </div>
             <div class="nav-pill-badge">
@@ -40,50 +41,232 @@
         <header class="header-section">
             <div class="header-badge">
                 <span class="badge-dot"></span>
-                <span>AI-Powered Speech & NLP System</span>
+                <span>AI Speech • Video Processing • Multi-Target Translation & Transliteration</span>
             </div>
             <h1 class="logo-title">
                 <span class="brand-gradient">DHVANI</span>
             </h1>
             <p class="logo-subtitle">
-                A Real-Time Multilingual Speech Recognition and Paragraph Translation System
+                A Real-Time Multilingual Speech Recognition, Video Transcription, and Paragraph Translation Platform
             </p>
             <p class="hero-explanation">
-                “Speak naturally in your preferred language, convert your speech into text in real time, organize it into meaningful paragraphs, and translate those paragraphs into another selected language.”
+                “Speak live via microphone, upload any video file, or paste a YouTube link. DHVANI extracts speech, organizes it into structured paragraphs, and translates into multiple languages simultaneously (Kannada, Telugu, Hindi, etc.) with readable English alphabet transliteration.”
             </p>
-            <div class="hero-actions">
-                <button id="hero-start-btn" class="btn btn-hero">
-                    <span class="btn-icon">🎙️</span>
-                    <span>Start Speaking</span>
-                </button>
-                <a href="#workspace" class="btn btn-secondary-outline">
-                    <span>Explore Workspace</span>
-                    <span class="btn-arrow">↓</span>
-                </a>
-            </div>
         </header>
 
         <!-- MAIN WORKSPACE -->
         <main id="workspace" class="main-container">
 
-            <!-- CARD 1: LANGUAGE SELECTION -->
-            <section class="card language-card" aria-label="Language Selection">
-                <div class="card-header">
+            <!-- MODE SELECTOR CARD -->
+            <section class="card mode-card" aria-label="Input Mode Selector">
+                <div class="card-header flex-header">
+                    <div class="card-title-group">
+                        <span class="card-icon">⚡</span>
+                        <h2 class="card-title">Choose Input Source</h2>
+                    </div>
+                    <span class="card-hint">Switch between Live Speech, Video Upload, or YouTube Link</span>
+                </div>
+
+                <!-- Mode Switcher Navigation Tabs -->
+                <div class="mode-nav-wrapper">
+                    <button id="mode-mic-btn" class="mode-tab-btn active" type="button">
+                        <span class="mode-btn-icon">🎙️</span>
+                        <span class="mode-btn-title">Live Microphone</span>
+                        <span class="mode-btn-desc">Real-time voice speech recognition</span>
+                    </button>
+                    <button id="mode-video-btn" class="mode-tab-btn" type="button">
+                        <span class="mode-btn-icon">🎬</span>
+                        <span class="mode-btn-title">Upload Video / Audio</span>
+                        <span class="mode-btn-desc">MP4, WebM, MKV, MOV, MP3, WAV</span>
+                    </button>
+                    <button id="mode-youtube-btn" class="mode-tab-btn" type="button">
+                        <span class="mode-btn-icon">📺</span>
+                        <span class="mode-btn-title">YouTube Video Link</span>
+                        <span class="mode-btn-desc">Transcribe & translate any YouTube link</span>
+                    </button>
+                </div>
+
+                <!-- 1. LIVE MICROPHONE CONTROLS -->
+                <div id="mic-controls-pane" class="mode-pane active">
+                    <div class="pane-content-row">
+                        <div class="pane-instruction">
+                            <span class="pane-badge">Voice Input</span>
+                            <p>Click <strong>Start Speaking</strong> and talk naturally. DHVANI captures your voice, converts it into words, and organizes sentences into coherent paragraphs.</p>
+                        </div>
+                        <div id="status-pill" class="status-pill status-ready">
+                            <span class="status-indicator-dot"></span>
+                            <span id="status-text" class="status-label">Ready</span>
+                        </div>
+                    </div>
+
+                    <!-- Visual Audio Waves -->
+                    <div id="audio-visualizer" class="audio-visualizer" aria-hidden="true">
+                        <div class="wave-bar bar-1"></div>
+                        <div class="wave-bar bar-2"></div>
+                        <div class="wave-bar bar-3"></div>
+                        <div class="wave-bar bar-4"></div>
+                        <div class="wave-bar bar-5"></div>
+                        <div class="wave-bar bar-6"></div>
+                        <div class="wave-bar bar-7"></div>
+                    </div>
+
+                    <!-- Microphone Controls Toolbar -->
+                    <div class="button-toolbar">
+                        <button id="start-btn" class="btn btn-primary" type="button">
+                            <span class="mic-circle"><span class="btn-icon">🎤</span></span>
+                            <span>Start Speaking</span>
+                        </button>
+                        <button id="stop-btn" class="btn btn-danger" type="button" disabled>
+                            <span class="btn-icon">⏹</span>
+                            <span>Stop</span>
+                        </button>
+                        <button id="demo-speech-btn" class="btn btn-secondary" type="button" title="Simulate speaking natural sentences into paragraphs">
+                            <span class="btn-icon">✨</span>
+                            <span>Test Sample Speech</span>
+                        </button>
+                        <button id="clear-btn" class="btn btn-ghost" type="button" title="Clear all text and reset">
+                            <span class="btn-icon">🗑️</span>
+                            <span>Clear</span>
+                        </button>
+                    </div>
+
+                    <!-- Speech Troubleshooting Box -->
+                    <div id="network-troubleshoot-box" class="troubleshoot-box" style="display: none;">
+                        <div class="troubleshoot-header">
+                            <div class="troubleshoot-title-group">
+                                <span class="troubleshoot-icon">⚠️</span>
+                                <h4 class="troubleshoot-title">Fixing "Network Connection Problem"</h4>
+                            </div>
+                            <button id="close-troubleshoot-btn" class="troubleshoot-close" type="button" title="Dismiss" aria-label="Close">&times;</button>
+                        </div>
+                        <div class="troubleshoot-body">
+                            <p class="troubleshoot-intro">
+                                Browser speech recognition streams audio to speech servers. If your browser or connection temporarily rejects the stream:
+                            </p>
+                            <ul class="troubleshoot-tips">
+                                <li>
+                                    <strong>1. Use localhost:</strong> Always access via 
+                                    <a id="switch-localhost-link" href="http://localhost:5000" class="troubleshoot-link">http://localhost:5000</a>.
+                                </li>
+                                <li>
+                                    <strong>2. Recommended Browsers:</strong> Google Chrome or Microsoft Edge.
+                                </li>
+                                <li>
+                                    <strong>3. Windows Microphone Privacy:</strong> Ensure <em>"Let desktop apps access your microphone"</em> is <strong>ON</strong>.
+                                </li>
+                            </ul>
+                            <div class="troubleshoot-footer">
+                                <button id="troubleshoot-retry-btn" class="btn btn-secondary btn-sm" type="button">🔄 Retry Speaking</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. VIDEO / AUDIO UPLOAD PANE -->
+                <div id="video-controls-pane" class="mode-pane" style="display: none;">
+                    <div class="upload-dropzone" id="upload-dropzone">
+                        <input type="file" id="media-file-input" accept="video/*,audio/*,.mp4,.webm,.mkv,.mov,.avi,.mp3,.wav,.m4a" style="display: none;">
+                        <div class="dropzone-content">
+                            <div class="dropzone-icon">📁</div>
+                            <h4 class="dropzone-title">Upload Video or Audio File</h4>
+                            <p class="dropzone-subtitle">Drag and drop your file here, or <button type="button" id="browse-file-btn" class="browse-link-btn">browse your computer</button></p>
+                            <span class="dropzone-formats">Supported: MP4, WebM, MOV, MKV, MP3, WAV, M4A (Up to 150MB)</span>
+                        </div>
+                    </div>
+
+                    <!-- File Details & Video Player Preview -->
+                    <div id="file-preview-card" class="file-preview-card" style="display: none;">
+                        <div class="file-preview-header">
+                            <div class="file-info-col">
+                                <span class="file-icon-badge">🎬</span>
+                                <div>
+                                    <h5 id="preview-filename" class="preview-filename">video.mp4</h5>
+                                    <span id="preview-filesize" class="preview-filesize">0 MB</span>
+                                </div>
+                            </div>
+                            <button id="remove-file-btn" class="btn btn-ghost btn-sm" type="button">✕ Remove</button>
+                        </div>
+                        <div class="video-preview-wrapper" id="video-preview-wrapper" style="display: none;">
+                            <video id="video-preview-player" controls preload="metadata"></video>
+                        </div>
+                    </div>
+
+                    <!-- Upload Action Toolbar -->
+                    <div class="button-toolbar">
+                        <button id="process-file-btn" class="btn btn-primary" type="button" disabled>
+                            <span class="btn-icon">🚀</span>
+                            <span>Transcribe & Translate Video</span>
+                        </button>
+                        <button id="sample-video-btn" class="btn btn-secondary" type="button">
+                            <span class="btn-icon">💡</span>
+                            <span>Load Sample Speech Demo</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. YOUTUBE LINK PANE -->
+                <div id="youtube-controls-pane" class="mode-pane" style="display: none;">
+                    <div class="youtube-input-box">
+                        <div class="youtube-url-row">
+                            <div class="input-with-icon">
+                                <span class="input-icon">🔗</span>
+                                <input type="url" id="youtube-url-input" class="custom-input" placeholder="Paste YouTube link here (e.g. https://www.youtube.com/watch?v=... or https://youtu.be/...)" autocomplete="off">
+                            </div>
+                            <button id="paste-yt-btn" class="btn btn-secondary" type="button" title="Paste link from clipboard">
+                                📋 Paste
+                            </button>
+                            <button id="process-yt-btn" class="btn btn-primary" type="button">
+                                <span class="btn-icon">⚡</span>
+                                <span>Fetch & Translate</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Quick Samples for Testing -->
+                        <div class="quick-samples-row">
+                            <span class="sample-label">Quick Test Links:</span>
+                            <button type="button" class="sample-yt-chip" data-url="https://www.youtube.com/watch?v=dQw4w9WgXcQ">🎵 Music Video</button>
+                            <button type="button" class="sample-yt-chip" data-url="https://www.youtube.com/watch?v=ufTFbHh6xI8">🎙️ English Tech Talk</button>
+                            <button type="button" class="sample-yt-chip" data-url="https://www.youtube.com/watch?v=L_LUpnjgPso">🌍 Global Keynote</button>
+                        </div>
+
+                        <!-- Embedded YouTube Preview Player -->
+                        <div id="yt-preview-container" class="yt-preview-container" style="display: none;">
+                            <div class="yt-embed-ratio">
+                                <iframe id="yt-embed-frame" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Processing / Loading Banner -->
+                <div id="global-processing-banner" class="processing-banner" style="display: none;">
+                    <div class="loading-spinner"></div>
+                    <div class="processing-info">
+                        <h4 id="processing-title" class="processing-title">Processing Media...</h4>
+                        <p id="processing-subtitle" class="processing-subtitle">Extracting speech waveforms with embedded FFmpeg and transcribing dialogue...</p>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- CARD 2: LANGUAGE SELECTION (SOURCE & MULTI-TARGET PREFERENCES) -->
+            <section class="card language-card" aria-label="Language Preferences">
+                <div class="card-header flex-header">
                     <div class="card-title-group">
                         <span class="card-icon">🌐</span>
-                        <h2 class="card-title">Language Selection</h2>
+                        <h2 class="card-title">Language Preferences</h2>
                     </div>
-                    <span class="card-hint">Choose your input speaking language and translation target</span>
+                    <span id="selected-summary-badge" class="selected-summary-badge">Selected: Kannada (ಕನ್ನಡ)</span>
                 </div>
 
                 <div class="language-selection-grid">
-                    <!-- Input Language Dropdown -->
+                    <!-- Source Language Dropdown -->
                     <div class="lang-selector-group">
                         <label for="input-language" class="form-label">
-                            <span class="label-badge label-input">Input Language (Speech)</span>
+                            <span class="label-badge label-input">Input / Spoken Language</span>
                         </label>
                         <div class="select-wrapper">
-                            <select id="input-language" class="custom-select" aria-label="Select Input Language">
+                            <select id="input-language" class="custom-select" aria-label="Select Spoken Language">
                                 <option value="en" data-speech="en-US" selected>English (English)</option>
                                 <option value="hi" data-speech="hi-IN">Hindi (हिन्दी)</option>
                                 <option value="kn" data-speech="kn-IN">Kannada (ಕನ್ನಡ)</option>
@@ -100,137 +283,110 @@
                         <span id="speech-code-tag" class="lang-code-hint">Speech Engine: en-US</span>
                     </div>
 
-                    <!-- Swap Languages Button -->
-                    <div class="swap-btn-container">
-                        <button id="swap-languages-btn" class="btn btn-swap" title="Swap Input and Target Languages" aria-label="Swap Languages">
-                            <span class="swap-icon">⇄</span>
-                            <span class="swap-text">Swap Languages</span>
-                        </button>
-                    </div>
-
-                    <!-- Target Language Dropdown -->
-                    <div class="lang-selector-group">
-                        <label for="target-language" class="form-label">
-                            <span class="label-badge label-target">Target Language (Translation)</span>
-                        </label>
-                        <div class="select-wrapper">
-                            <select id="target-language" class="custom-select" aria-label="Select Target Language">
-                                <option value="en">English (English)</option>
-                                <option value="hi">Hindi (हिन्दी)</option>
-                                <option value="kn" selected>Kannada (ಕನ್ನಡ)</option>
-                                <option value="ta">Tamil (தமிழ்)</option>
-                                <option value="te">Telugu (తెలుగు)</option>
-                                <option value="ml">Malayalam (മലയാളം)</option>
-                                <option value="mr">Marathi (मराठी)</option>
-                                <option value="bn">Bengali (বাংলা)</option>
-                                <option value="gu">Gujarati (ગુજરાતી)</option>
-                                <option value="es">Spanish (Español)</option>
-                            </select>
-                            <span class="select-arrow">▼</span>
+                    <!-- Target Language Multi-Selection Container -->
+                    <div class="target-multi-container">
+                        <div class="target-header-row">
+                            <label class="form-label">
+                                <span class="label-badge label-target">Target Language(s) — Multi-Select Enabled</span>
+                            </label>
+                            <!-- Quick Preset Buttons -->
+                            <div class="preset-buttons-group">
+                                <button type="button" id="preset-kth-btn" class="btn-preset active" title="Select Kannada, Telugu, and Hindi together">
+                                    ⚡ Kannada + Telugu + Hindi
+                                </button>
+                                <button type="button" id="preset-south-btn" class="btn-preset" title="Select all South Indian languages">
+                                    🌴 South Indian (KN, TE, TA, ML)
+                                </button>
+                                <button type="button" id="preset-all-btn" class="btn-preset">
+                                    Select All
+                                </button>
+                                <button type="button" id="preset-clear-btn" class="btn-preset btn-preset-clear">
+                                    Clear
+                                </button>
+                            </div>
                         </div>
-                        <span id="target-code-tag" class="lang-code-hint">Target Output: kn (Kannada)</span>
+
+                        <!-- Language Multi-Select Chips Grid -->
+                        <div class="lang-chips-grid" id="lang-chips-grid">
+                            <button type="button" class="lang-chip selected" data-code="kn">
+                                <span class="chip-flag">🇮🇳</span>
+                                <span class="chip-name">Kannada</span>
+                                <span class="chip-native">ಕನ್ನಡ</span>
+                                <span class="chip-check">✓</span>
+                            </button>
+                            <button type="button" class="lang-chip selected" data-code="te">
+                                <span class="chip-flag">🇮🇳</span>
+                                <span class="chip-name">Telugu</span>
+                                <span class="chip-native">తెలుగు</span>
+                                <span class="chip-check">✓</span>
+                            </button>
+                            <button type="button" class="lang-chip selected" data-code="hi">
+                                <span class="chip-flag">🇮🇳</span>
+                                <span class="chip-name">Hindi</span>
+                                <span class="chip-native">हिन्दी</span>
+                                <span class="chip-check">✓</span>
+                            </button>
+                            <button type="button" class="lang-chip" data-code="ta">
+                                <span class="chip-flag">🇮🇳</span>
+                                <span class="chip-name">Tamil</span>
+                                <span class="chip-native">தமிழ்</span>
+                                <span class="chip-check">✓</span>
+                            </button>
+                            <button type="button" class="lang-chip" data-code="ml">
+                                <span class="chip-flag">🇮🇳</span>
+                                <span class="chip-name">Malayalam</span>
+                                <span class="chip-native">മലയാളം</span>
+                                <span class="chip-check">✓</span>
+                            </button>
+                            <button type="button" class="lang-chip" data-code="mr">
+                                <span class="chip-flag">🇮🇳</span>
+                                <span class="chip-name">Marathi</span>
+                                <span class="chip-native">मराठी</span>
+                                <span class="chip-check">✓</span>
+                            </button>
+                            <button type="button" class="lang-chip" data-code="bn">
+                                <span class="chip-flag">🇮🇳</span>
+                                <span class="chip-name">Bengali</span>
+                                <span class="chip-native">বাংলা</span>
+                                <span class="chip-check">✓</span>
+                            </button>
+                            <button type="button" class="lang-chip" data-code="gu">
+                                <span class="chip-flag">🇮🇳</span>
+                                <span class="chip-name">Gujarati</span>
+                                <span class="chip-native">ગુજરાતી</span>
+                                <span class="chip-check">✓</span>
+                            </button>
+                            <button type="button" class="lang-chip" data-code="en">
+                                <span class="chip-flag">🌐</span>
+                                <span class="chip-name">English</span>
+                                <span class="chip-native">English</span>
+                                <span class="chip-check">✓</span>
+                            </button>
+                            <button type="button" class="lang-chip" data-code="es">
+                                <span class="chip-flag">🇪🇸</span>
+                                <span class="chip-name">Spanish</span>
+                                <span class="chip-native">Español</span>
+                                <span class="chip-check">✓</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>
 
+
             <!-- WORKSPACE TWO-COLUMN / GRID LAYOUT -->
             <div class="panels-grid">
 
-                <!-- CARD 2: SPEECH RECOGNITION (ORIGINAL SPEECH) -->
-                <section id="speech-card" class="card speech-card" aria-label="Speech Recognition">
+                <!-- CARD 3: SPEECH RECOGNITION / VIDEO DIALOGUE (ORIGINAL) -->
+                <section id="speech-card" class="card speech-card" aria-label="Original Speech Dialogue">
                     <div class="card-header flex-header">
                         <div class="card-title-group">
                             <span class="card-icon">🎤</span>
-                            <h2 class="card-title">Speech Recognition</h2>
-                        </div>
-                        <!-- Live Status Badge -->
-                        <div id="status-pill" class="status-pill status-ready">
-                            <span class="status-indicator-dot"></span>
-                            <span id="status-text" class="status-label">Ready</span>
-                        </div>
-                    </div>
-
-                    <!-- Visual Audio Waves / Listening State Indicator -->
-                    <div id="audio-visualizer" class="audio-visualizer" aria-hidden="true">
-                        <div class="wave-bar bar-1"></div>
-                        <div class="wave-bar bar-2"></div>
-                        <div class="wave-bar bar-3"></div>
-                        <div class="wave-bar bar-4"></div>
-                        <div class="wave-bar bar-5"></div>
-                        <div class="wave-bar bar-6"></div>
-                        <div class="wave-bar bar-7"></div>
-                    </div>
-
-                    <!-- Speech Recognition Controls -->
-                    <div class="button-toolbar">
-                        <button id="start-btn" class="btn btn-primary">
-                            <span class="mic-circle">
-                                <span class="btn-icon">🎤</span>
-                            </span>
-                            <span>Start Speaking</span>
-                        </button>
-                        <button id="stop-btn" class="btn btn-danger" disabled>
-                            <span class="btn-icon">⏹</span>
-                            <span>Stop</span>
-                        </button>
-                        <button id="demo-speech-btn" class="btn btn-secondary" title="Simulate speaking natural sentences into paragraphs">
-                            <span class="btn-icon">✨</span>
-                            <span>Test Sample Speech</span>
-                        </button>
-                        <button id="clear-btn" class="btn btn-ghost" title="Clear all text and reset">
-                            <span class="btn-icon">🗑️</span>
-                            <span>Clear</span>
-                        </button>
-                    </div>
-
-                    <!-- Speech Recognition Network Diagnostics & Resolution Card -->
-                    <div id="network-troubleshoot-box" class="troubleshoot-box" style="display: none;">
-                        <div class="troubleshoot-header">
-                            <div class="troubleshoot-title-group">
-                                <span class="troubleshoot-icon">⚠️</span>
-                                <h4 class="troubleshoot-title">Fixing "Network Connection Problem"</h4>
-                            </div>
-                            <button id="close-troubleshoot-btn" class="troubleshoot-close" type="button" title="Dismiss" aria-label="Close">&times;</button>
-                        </div>
-                        <div class="troubleshoot-body">
-                            <p class="troubleshoot-intro">
-                                Browser speech recognition streams audio to Google's speech cloud. If your browser or Wi-Fi temporarily rejects that stream, apply these 4 fast solutions:
-                            </p>
-                            <ul class="troubleshoot-tips">
-                                <li>
-                                    <strong>1. Use <code>localhost</code> instead of <code>127.0.0.1</code>:</strong>
-                                    Chrome's security policy requires a secure origin.
-                                    <a id="switch-localhost-link" href="http://localhost:5000" class="troubleshoot-link">👉 Click here to switch to http://localhost:5000</a>
-                                </li>
-                                <li>
-                                    <strong>2. Recommended Browsers:</strong>
-                                    Use standard <strong>Google Chrome</strong> or <strong>Microsoft Edge</strong>. <em>(Note: Brave browser disables Google speech services by default; if using Brave, enable Google services under settings or open in Chrome)</em>.
-                                </li>
-                                <li>
-                                    <strong>3. Windows Microphone Privacy:</strong>
-                                    Open Windows <em>Settings &gt; Privacy & Security &gt; Microphone</em> &rarr; ensure <strong>"Let desktop apps access your microphone"</strong> is <strong>ON</strong>.
-                                </li>
-                                <li>
-                                    <strong>4. VPN / College Wi-Fi Firewall:</strong>
-                                    If your Wi-Fi or VPN blocks speech WebSockets, disconnect VPN or test via a mobile hotspot.
-                                </li>
-                            </ul>
-                            <div class="troubleshoot-footer">
-                                <button id="troubleshoot-retry-btn" class="btn btn-secondary btn-sm" type="button">🔄 Retry Speaking</button>
-                                <span class="troubleshoot-subtext">💡 Note: You can also switch to the <strong>Raw Text</strong> tab below to type/paste text directly and translate!</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Content Header & View Mode Switcher -->
-                    <div class="content-header">
-                        <div class="section-label-group">
-                            <h3 class="section-heading">ORIGINAL SPEECH</h3>
-                            <span class="section-subtext">Recognized sentences organized into paragraphs</span>
+                            <h2 class="card-title">Original Speech & Dialogue</h2>
                         </div>
                         <div class="view-toggle">
-                            <button id="view-paragraphs-btn" class="view-btn active" title="Show structured paragraphs">Paragraphs</button>
-                            <button id="view-raw-btn" class="view-btn" title="Show raw transcribed speech">Raw Text</button>
+                            <button id="view-paragraphs-btn" class="view-btn active" title="Show structured paragraphs" type="button">Paragraphs</button>
+                            <button id="view-raw-btn" class="view-btn" title="Show editable plain text" type="button">Raw Text</button>
                         </div>
                     </div>
 
@@ -238,13 +394,13 @@
                     <div id="paragraphs-container" class="output-box paragraph-view-box">
                         <div id="placeholder-speech" class="placeholder-content">
                             <div class="placeholder-icon">🎙️</div>
-                            <p class="placeholder-text">Your recognized speech appears here.</p>
-                            <p class="placeholder-subtext">Click <strong>Start Speaking</strong> and talk naturally into your microphone.</p>
+                            <p class="placeholder-text">Your recognized speech or video dialogue appears here.</p>
+                            <p class="placeholder-subtext">Speak into your microphone, upload a video file, or paste a YouTube URL above.</p>
                         </div>
                         <div id="paragraph-list" class="paragraph-list" style="display: none;"></div>
                     </div>
 
-                    <!-- Raw Textarea (Available when Raw Text toggle is selected or for manual editing) -->
+                    <!-- Raw Textarea View (Editable for manual typing/pasting) -->
                     <div id="raw-container" class="raw-container" style="display: none;">
                         <textarea id="raw-speech-textarea" class="raw-textarea" placeholder="Recognized speech in plain text..." rows="8"></textarea>
                     </div>
@@ -255,111 +411,153 @@
                         <span id="interim-text" class="interim-text">...</span>
                     </div>
 
-                    <!-- Card Footer Statistics -->
+                    <!-- Card Footer Statistics & Actions -->
                     <div class="card-footer">
                         <span id="speech-stats" class="text-counter">0 words • 0 characters • 0 paragraphs</span>
-                        <button id="copy-speech-btn" class="btn-text-action" title="Copy original speech">
-                            📋 Copy Original
-                        </button>
+                        <div class="card-footer-actions">
+                            <button id="copy-speech-btn" class="btn-text-action" type="button" title="Copy original speech">
+                                📋 Copy Original
+                            </button>
+                            <button id="download-speech-srt" class="btn-text-action" type="button" title="Download Subtitles (.SRT)">
+                                📥 Subtitles (.SRT)
+                            </button>
+                        </div>
                     </div>
                 </section>
 
 
-                <!-- CARD 3: TRANSLATION (TRANSLATED PARAGRAPH) -->
-                <section id="translation-card" class="card translation-card" aria-label="Paragraph Translation">
+                <!-- CARD 4: TRANSLATION & TRANSLITERATION OUTPUT (MULTI-LANGUAGE) -->
+                <section id="translation-card" class="card translation-card" aria-label="Multi-Language Translation and Transliteration">
                     <div class="card-header flex-header">
                         <div class="card-title-group">
                             <span class="card-icon">🌐</span>
-                            <h2 class="card-title">Translation</h2>
+                            <h2 class="card-title">Translation & Transliteration</h2>
                         </div>
-                        <span id="target-badge" class="target-badge">Kannada (ಕನ್ನಡ)</span>
+                        
+                        <!-- Transliteration View Toggle -->
+                        <div id="transliteration-section" class="translit-mode-toggle">
+                            <button id="script-english-btn" class="translit-pill active" type="button" title="Display in readable English letters (e.g. naanu, namaskara)">
+                                🔤 English Letters
+                            </button>
+                            <button id="script-native-btn" class="translit-pill" type="button" title="Display in native script (e.g. ನಾನು, ನಮಸ್ಕಾರ)">
+                                ✍️ Native Script
+                            </button>
+                            <button id="script-both-btn" class="translit-pill" type="button" title="Display both native script and English letters side-by-side">
+                                🪟 Both (Dual View)
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Translation Controls -->
+                    <!-- Transliteration Hint & Style Bar -->
+                    <div class="translit-sub-bar">
+                        <span class="translit-desc-text">
+                            ✨ <strong>English Transliteration:</strong> Converts Indian languages into readable English letters (e.g. Kannada <em>"ನಾನು"</em> &rarr; <em>"naanu" / "nanu"</em>).
+                        </span>
+                        <div class="style-choice-group">
+                            <span class="style-choice-label">Spelling Style:</span>
+                            <button type="button" id="style-friendly-btn" class="style-btn active" title="Friendly spelling: naanu, manege, hoguttiddene">Friendly (naanu)</button>
+                            <button type="button" id="style-simple-btn" class="style-btn" title="Short simple spelling: nanu, manege, hogutidene">Simple (nanu)</button>
+                        </div>
+                    </div>
+
+                    <!-- Translation Controls Toolbar -->
                     <div class="button-toolbar">
-                        <button id="translate-btn" class="btn btn-success">
+                        <button id="translate-btn" class="btn btn-success" type="button">
                             <span class="btn-icon">⚡</span>
-                            <span>Translate</span>
+                            <span>Translate to Selected Languages</span>
                         </button>
-                        <button id="copy-translation-btn" class="btn btn-secondary" title="Copy translated text to clipboard">
+                        <button id="copy-translation-btn" class="btn btn-secondary" type="button" title="Copy current translation to clipboard">
                             <span class="btn-icon">📋</span>
-                            <span>Copy Translation</span>
+                            <span>Copy Active Translation</span>
                         </button>
-                        <button id="speak-translation-btn" class="btn btn-ghost" title="Read translated paragraph aloud">
+                        <button id="speak-translation-btn" class="btn btn-ghost" type="button" title="Read translation aloud using Text-to-Speech">
                             <span class="btn-icon">🔊</span>
                             <span>Listen</span>
                         </button>
                     </div>
 
-                    <!-- Translation Section Header -->
-                    <div class="content-header">
-                        <div class="section-label-group">
-                            <h3 class="section-heading">TRANSLATED PARAGRAPH</h3>
-                            <span class="section-subtext">Multi-lingual sentence & paragraph translation</span>
-                        </div>
+                    <!-- Dynamic Target Language Switcher Tabs -->
+                    <div id="target-lang-tabs" class="target-lang-tabs" style="display: none;">
+                        <!-- Injected dynamically via JS: [Kannada] [Telugu] [Hindi] [Grid View] -->
                     </div>
 
-                    <!-- Translated Paragraph Output Box -->
+                    <!-- Output Container -->
                     <div id="translation-container" class="output-box translation-view-box">
                         <div id="placeholder-translation" class="placeholder-content">
                             <div class="placeholder-icon">🌐</div>
-                            <p class="placeholder-text">Your translated paragraph appears here.</p>
-                            <p class="placeholder-subtext">Click <strong>Translate</strong> after speaking or entering speech text.</p>
+                            <p class="placeholder-text">Your translated paragraphs & English transliterations will appear here.</p>
+                            <p class="placeholder-subtext">Click <strong>Translate to Selected Languages</strong> to convert your speech or video.</p>
                         </div>
-                        <div id="translation-list" class="paragraph-list" style="display: none;"></div>
+
+                        <!-- Active Single Language View Panel -->
+                        <div id="active-lang-panel" class="active-lang-panel" style="display: none;">
+                            <!-- Injected dynamically -->
+                        </div>
+
+                        <!-- All Selected Languages Combined Grid View Panel -->
+                        <div id="all-langs-grid-panel" class="all-langs-grid-panel" style="display: none;">
+                            <!-- Injected dynamically -->
+                        </div>
                     </div>
 
-                    <!-- Loading State Overlay -->
+                    <!-- Translation Loading Overlay -->
                     <div id="translation-loading" class="translation-loading" style="display: none;">
                         <div class="loading-spinner"></div>
-                        <p class="loading-text">Translating paragraphs via backend...</p>
+                        <p class="loading-text" id="translation-loading-text">Translating into Kannada, Telugu, Hindi with English transliteration...</p>
                     </div>
 
                     <!-- Translation Card Footer -->
                     <div class="card-footer">
                         <span id="translation-stats" class="text-counter">0 words • 0 characters</span>
-                        <span id="engine-info" class="engine-info">Backend: Flask / NLP Service</span>
+                        <div class="card-footer-actions">
+                            <button id="download-trans-srt" class="btn-text-action" type="button" title="Download Subtitles in Translated Language">
+                                📥 Subtitles (.SRT)
+                            </button>
+                            <button id="download-trans-txt" class="btn-text-action" type="button" title="Export Translated Text">
+                                📄 Export (.TXT)
+                            </button>
+                        </div>
                     </div>
                 </section>
 
             </div>
 
-            <!-- FEATURE HIGHLIGHTS / EDUCATIONAL ARCHITECTURE -->
+            <!-- SYSTEM ARCHITECTURE OVERVIEW -->
             <section id="how-it-works" class="card architecture-card">
                 <div class="card-header">
                     <div class="card-title-group">
                         <span class="card-icon">⚙️</span>
-                        <h2 class="card-title">How Dhvani Works</h2>
+                        <h2 class="card-title">How Dhvani Multilingual Platform Works</h2>
                     </div>
-                    <span class="card-hint">System pipeline overview for presentation & review</span>
+                    <span class="card-hint">Multi-modal speech recognition, video extraction, translation, and transliteration pipeline</span>
                 </div>
                 <div class="flow-steps-grid">
                     <div class="flow-step">
                         <div class="step-num">1</div>
-                        <div class="step-icon">🎙️</div>
-                        <h4>Speech Capture</h4>
-                        <p>User speaks into mic; Browser Web Speech API captures audio waveforms with chosen dialect code.</p>
+                        <div class="step-icon">🎙️ 🎬 📺</div>
+                        <h4>Tri-Modal Capture</h4>
+                        <p>Accepts live microphone audio, video/audio files (MP4, WebM, etc.), or YouTube URLs seamlessly.</p>
                     </div>
                     <div class="flow-step-arrow">→</div>
                     <div class="flow-step">
                         <div class="step-num">2</div>
-                        <div class="step-icon">📝</div>
-                        <h4>Real-Time Transcription</h4>
-                        <p>Speech is converted to text tokens in real time with continuous interim and final result handling.</p>
+                        <div class="step-icon">⚡</div>
+                        <h4>Dialogue Extraction</h4>
+                        <p>Embedded FFmpeg decodes media waveforms; Google Speech Recognition transcribes spoken words.</p>
                     </div>
                     <div class="flow-step-arrow">→</div>
                     <div class="flow-step">
                         <div class="step-num">3</div>
-                        <div class="step-icon">📑</div>
-                        <h4>Paragraph Formation</h4>
-                        <p>Boundary detection and pauses group continuous sentences into formatted, readable paragraphs.</p>
+                        <div class="step-icon">🌐</div>
+                        <h4>Multi-Target Translation</h4>
+                        <p>Translates into multiple selected languages at once (e.g., Kannada, Telugu, and Hindi).</p>
                     </div>
                     <div class="flow-step-arrow">→</div>
                     <div class="flow-step">
                         <div class="step-num">4</div>
-                        <div class="step-icon">🌐</div>
-                        <h4>Flask Translation</h4>
-                        <p>Backend REST API receives paragraphs, invokes the translation engine, and returns multilingual text.</p>
+                        <div class="step-icon">🔤</div>
+                        <h4>English Transliteration</h4>
+                        <p>Generates fluent English alphabet phonetic text (e.g., Kannada "ನಾನು" converted into "naanu / nanu").</p>
                     </div>
                 </div>
             </section>
@@ -369,9 +567,9 @@
         <!-- FOOTER -->
         <footer class="app-footer">
             <div class="footer-content">
-                <p class="footer-title"><strong>DHVANI</strong> — Multilingual Speech Recognition & Paragraph Translation System</p>
+                <p class="footer-title"><strong>DHVANI</strong> — Real-Time Multilingual Speech Recognition, Video Transcription, and Paragraph Translation Platform</p>
                 <p class="footer-tech">
-                    Built with HTML5 • Vanilla CSS • Vanilla JavaScript • Python Flask • Web Speech API
+                    Built with HTML5 • Vanilla CSS • Vanilla JavaScript • Python Flask • Embedded FFmpeg • Neural Translation
                 </p>
                 <p class="footer-note">College Project Demonstration Edition</p>
             </div>
@@ -379,6 +577,6 @@
     </div>
 
     <!-- Application Script -->
-    <script src="{{ url_for('static', filename='js/script.js') }}?v=2026-lavender"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}?v=2026-v2-lavender"></script>
 </body>
 </html>
