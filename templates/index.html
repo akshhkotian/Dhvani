@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DHVANI - Multilingual Speech Recognition, Video Transcription & Translation</title>
     <!-- Custom Stylesheet (Pure CSS - No Bootstrap, No Tailwind) -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2026-v2-lavender">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2026-v3-neat">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -249,22 +249,26 @@
             </section>
 
 
-            <!-- CARD 2: LANGUAGE SELECTION (SOURCE & MULTI-TARGET PREFERENCES) -->
+            <!-- CARD 2: LANGUAGE PREFERENCES (SOURCE & MULTI-TARGET) -->
             <section class="card language-card" aria-label="Language Preferences">
                 <div class="card-header flex-header">
                     <div class="card-title-group">
                         <span class="card-icon">🌐</span>
-                        <h2 class="card-title">Language Preferences</h2>
+                        <div>
+                            <h2 class="card-title">Language Preferences</h2>
+                            <span class="card-hint">Set spoken audio language and choose one or more target translation languages</span>
+                        </div>
                     </div>
-                    <span id="selected-summary-badge" class="selected-summary-badge">Selected: Kannada (ಕನ್ನಡ)</span>
+                    <span id="selected-summary-badge" class="selected-summary-badge">Selected (3): Kannada, Telugu, Hindi</span>
                 </div>
 
-                <div class="language-selection-grid">
-                    <!-- Source Language Dropdown -->
-                    <div class="lang-selector-group">
-                        <label for="input-language" class="form-label">
-                            <span class="label-badge label-input">Input / Spoken Language</span>
-                        </label>
+                <div class="language-dashboard-layout">
+                    <!-- Left Column: Input / Spoken Language -->
+                    <div class="lang-input-column">
+                        <div class="column-title-row">
+                            <span class="label-badge label-input">1. Spoken Language</span>
+                            <span class="col-subtext">Source dialect in mic/video</span>
+                        </div>
                         <div class="select-wrapper">
                             <select id="input-language" class="custom-select" aria-label="Select Spoken Language">
                                 <option value="en" data-speech="en-US" selected>English (English)</option>
@@ -280,92 +284,117 @@
                             </select>
                             <span class="select-arrow">▼</span>
                         </div>
-                        <span id="speech-code-tag" class="lang-code-hint">Speech Engine: en-US</span>
+                        <div class="engine-badge-row">
+                            <span id="speech-code-tag" class="lang-code-hint">Speech Engine: en-US</span>
+                        </div>
                     </div>
 
-                    <!-- Target Language Multi-Selection Container -->
-                    <div class="target-multi-container">
-                        <div class="target-header-row">
-                            <label class="form-label">
-                                <span class="label-badge label-target">Target Language(s) — Multi-Select Enabled</span>
-                            </label>
-                            <!-- Quick Preset Buttons -->
+                    <!-- Right Column: Target Multi-Selection -->
+                    <div class="lang-target-column">
+                        <div class="target-top-controls">
+                            <div class="column-title-row">
+                                <span class="label-badge label-target">2. Target Language(s) — Multi-Select</span>
+                                <span class="col-subtext">Click languages to add/remove</span>
+                            </div>
+
+                            <!-- Preset buttons -->
                             <div class="preset-buttons-group">
+                                <span class="preset-label">Presets:</span>
                                 <button type="button" id="preset-kth-btn" class="btn-preset active" title="Select Kannada, Telugu, and Hindi together">
                                     ⚡ Kannada + Telugu + Hindi
                                 </button>
                                 <button type="button" id="preset-south-btn" class="btn-preset" title="Select all South Indian languages">
-                                    🌴 South Indian (KN, TE, TA, ML)
+                                    🌴 South Indian
                                 </button>
                                 <button type="button" id="preset-all-btn" class="btn-preset">
-                                    Select All
+                                    All
                                 </button>
                                 <button type="button" id="preset-clear-btn" class="btn-preset btn-preset-clear">
-                                    Clear
+                                    Reset
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Language Multi-Select Chips Grid -->
+                        <!-- Language Chips -->
                         <div class="lang-chips-grid" id="lang-chips-grid">
                             <button type="button" class="lang-chip selected" data-code="kn">
                                 <span class="chip-flag">🇮🇳</span>
-                                <span class="chip-name">Kannada</span>
-                                <span class="chip-native">ಕನ್ನಡ</span>
+                                <span class="chip-label">
+                                    <span class="chip-name">Kannada</span>
+                                    <span class="chip-native">(ಕನ್ನಡ)</span>
+                                </span>
                                 <span class="chip-check">✓</span>
                             </button>
                             <button type="button" class="lang-chip selected" data-code="te">
                                 <span class="chip-flag">🇮🇳</span>
-                                <span class="chip-name">Telugu</span>
-                                <span class="chip-native">తెలుగు</span>
+                                <span class="chip-label">
+                                    <span class="chip-name">Telugu</span>
+                                    <span class="chip-native">(తెలుగు)</span>
+                                </span>
                                 <span class="chip-check">✓</span>
                             </button>
                             <button type="button" class="lang-chip selected" data-code="hi">
                                 <span class="chip-flag">🇮🇳</span>
-                                <span class="chip-name">Hindi</span>
-                                <span class="chip-native">हिन्दी</span>
+                                <span class="chip-label">
+                                    <span class="chip-name">Hindi</span>
+                                    <span class="chip-native">(हिन्दी)</span>
+                                </span>
                                 <span class="chip-check">✓</span>
                             </button>
                             <button type="button" class="lang-chip" data-code="ta">
                                 <span class="chip-flag">🇮🇳</span>
-                                <span class="chip-name">Tamil</span>
-                                <span class="chip-native">தமிழ்</span>
+                                <span class="chip-label">
+                                    <span class="chip-name">Tamil</span>
+                                    <span class="chip-native">(தமிழ்)</span>
+                                </span>
                                 <span class="chip-check">✓</span>
                             </button>
                             <button type="button" class="lang-chip" data-code="ml">
                                 <span class="chip-flag">🇮🇳</span>
-                                <span class="chip-name">Malayalam</span>
-                                <span class="chip-native">മലയാളം</span>
+                                <span class="chip-label">
+                                    <span class="chip-name">Malayalam</span>
+                                    <span class="chip-native">(മലയാളം)</span>
+                                </span>
                                 <span class="chip-check">✓</span>
                             </button>
                             <button type="button" class="lang-chip" data-code="mr">
                                 <span class="chip-flag">🇮🇳</span>
-                                <span class="chip-name">Marathi</span>
-                                <span class="chip-native">मराठी</span>
+                                <span class="chip-label">
+                                    <span class="chip-name">Marathi</span>
+                                    <span class="chip-native">(मराठी)</span>
+                                </span>
                                 <span class="chip-check">✓</span>
                             </button>
                             <button type="button" class="lang-chip" data-code="bn">
                                 <span class="chip-flag">🇮🇳</span>
-                                <span class="chip-name">Bengali</span>
-                                <span class="chip-native">বাংলা</span>
+                                <span class="chip-label">
+                                    <span class="chip-name">Bengali</span>
+                                    <span class="chip-native">(বাংলা)</span>
+                                </span>
                                 <span class="chip-check">✓</span>
                             </button>
                             <button type="button" class="lang-chip" data-code="gu">
                                 <span class="chip-flag">🇮🇳</span>
-                                <span class="chip-name">Gujarati</span>
-                                <span class="chip-native">ગુજરાતી</span>
+                                <span class="chip-label">
+                                    <span class="chip-name">Gujarati</span>
+                                    <span class="chip-native">(ગુજરાતી)</span>
+                                </span>
                                 <span class="chip-check">✓</span>
                             </button>
                             <button type="button" class="lang-chip" data-code="en">
                                 <span class="chip-flag">🌐</span>
-                                <span class="chip-name">English</span>
-                                <span class="chip-native">English</span>
+                                <span class="chip-label">
+                                    <span class="chip-name">English</span>
+                                    <span class="chip-native">(English)</span>
+                                </span>
                                 <span class="chip-check">✓</span>
                             </button>
                             <button type="button" class="lang-chip" data-code="es">
                                 <span class="chip-flag">🇪🇸</span>
-                                <span class="chip-name">Spanish</span>
-                                <span class="chip-native">Español</span>
+                                <span class="chip-label">
+                                    <span class="chip-name">Spanish</span>
+                                    <span class="chip-native">(Español)</span>
+                                </span>
                                 <span class="chip-check">✓</span>
                             </button>
                         </div>
@@ -577,6 +606,6 @@
     </div>
 
     <!-- Application Script -->
-    <script src="{{ url_for('static', filename='js/script.js') }}?v=2026-v2-lavender"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}?v=2026-v3-neat"></script>
 </body>
 </html>
