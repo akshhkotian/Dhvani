@@ -1866,21 +1866,16 @@ body {
 
 .translit-sub-bar {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     background-color: rgba(155, 138, 196, 0.08);
-    padding: 0.55rem 1rem;
+    padding: 0.4rem 0.75rem;
     border-radius: var(--radius-md);
-    margin: 0.75rem 0 1rem;
+    margin: 0.5rem 0 0.85rem;
     font-size: 0.82rem;
     color: var(--nav-text);
     flex-wrap: wrap;
     gap: 0.5rem;
-}
-
-.translit-desc-text {
-    flex: 1;
-    min-width: 220px;
 }
 
 .style-choice-group {

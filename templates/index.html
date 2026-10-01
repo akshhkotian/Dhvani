@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DHVANI - Multilingual Speech Recognition, Video Transcription & Translation</title>
     <!-- Custom Stylesheet (Pure CSS - No Bootstrap, No Tailwind) -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2026-v3-neat">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2026-v4-clean">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -477,11 +477,8 @@
                         </div>
                     </div>
 
-                    <!-- Transliteration Hint & Style Bar -->
+                    <!-- Transliteration Style Bar -->
                     <div class="translit-sub-bar">
-                        <span class="translit-desc-text">
-                            ✨ <strong>English Transliteration:</strong> Converts Indian languages into readable English letters (e.g. Kannada <em>"ನಾನು"</em> &rarr; <em>"naanu" / "nanu"</em>).
-                        </span>
                         <div class="style-choice-group">
                             <span class="style-choice-label">Spelling Style:</span>
                             <button type="button" id="style-friendly-btn" class="style-btn active" title="Friendly spelling: naanu, manege, hoguttiddene">Friendly (naanu)</button>
@@ -606,6 +603,6 @@
     </div>
 
     <!-- Application Script -->
-    <script src="{{ url_for('static', filename='js/script.js') }}?v=2026-v3-neat"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}?v=2026-v4-clean"></script>
 </body>
 </html>
