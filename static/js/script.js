@@ -16,6 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const processingTitle = document.getElementById('processing-title');
     const processingSubtitle = document.getElementById('processing-subtitle');
 
+    // Theme Toggle Elements
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const themeToggleIcon = document.getElementById('theme-toggle-icon');
+    const themeToggleLabel = document.getElementById('theme-toggle-label');
+
     // Mode Switcher Elements
     const modeMicBtn = document.getElementById('mode-mic-btn');
     const modeVideoBtn = document.getElementById('mode-video-btn');
@@ -223,6 +228,36 @@ document.addEventListener('DOMContentLoaded', () => {
     modeMicBtn.addEventListener('click', () => setMode('mic'));
     modeVideoBtn.addEventListener('click', () => setMode('video'));
     modeYoutubeBtn.addEventListener('click', () => setMode('youtube'));
+
+    // -------------------------------------------------------------------------
+    // THEME CONTROLLER (DEFAULT LIGHT THEME & DARK THEME SWITCHER)
+    // -------------------------------------------------------------------------
+    function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('dhvani_theme', theme);
+        if (themeToggleIcon && themeToggleLabel) {
+            if (theme === 'dark') {
+                themeToggleIcon.textContent = '☀️';
+                themeToggleLabel.textContent = 'Light Mode';
+            } else {
+                themeToggleIcon.textContent = '🌙';
+                themeToggleLabel.textContent = 'Dark Mode';
+            }
+        }
+    }
+
+    // Default to light theme when opened (per user request)
+    const initialTheme = localStorage.getItem('dhvani_theme') || 'light';
+    setTheme(initialTheme);
+
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(nextTheme);
+            showToast(`Switched to ${nextTheme === 'dark' ? 'Dark' : 'Light'} Mode`, 'info', 'Theme Changed');
+        });
+    }
 
     // -------------------------------------------------------------------------
     // MULTI-TARGET LANGUAGE SELECTION DROPDOWN & PRESETS

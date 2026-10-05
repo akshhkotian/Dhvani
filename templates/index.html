@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DHVANI - Multilingual Speech Recognition, Video Transcription & Translation Studio</title>
     <!-- Pure Custom Stylesheet (No Bootstrap, No Tailwind) -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2026-v7-purple-black">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2026-v8-duo-theme">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Top Ambient Lavender Glow -->
+    <!-- Top Ambient Glow -->
     <div class="top-glow"></div>
 
     <!-- Notification Toast Container -->
@@ -33,9 +33,15 @@
                 <a href="#how-it-works" class="nav-link">Architecture</a>
             </nav>
 
-            <div class="nav-status-badge">
-                <span class="nav-status-dot"></span>
-                <span>System Ready</span>
+            <div class="nav-right-cluster">
+                <button type="button" id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle Light and Dark Mode" title="Toggle Light / Dark Mode">
+                    <span class="theme-toggle-icon" id="theme-toggle-icon">🌙</span>
+                    <span class="theme-toggle-label" id="theme-toggle-label">Dark Mode</span>
+                </button>
+                <div class="nav-status-badge">
+                    <span class="nav-status-dot"></span>
+                    <span>System Ready</span>
+                </div>
             </div>
         </header>
 
@@ -635,6 +641,6 @@
     </div>
 
     <!-- Application Controller Script -->
-    <script src="{{ url_for('static', filename='js/script.js') }}?v=2026-v6-dropdown"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}?v=2026-v8-duo-theme"></script>
 </body>
 </html>
