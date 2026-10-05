@@ -28,7 +28,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputLangSelect = document.getElementById('input-language');
     const speechCodeTag = document.getElementById('speech-code-tag');
     const selectedSummaryBadge = document.getElementById('selected-summary-badge');
-    const langChipsGrid = document.getElementById('lang-chips-grid');
+    const targetDropdownWrapper = document.getElementById('target-dropdown-wrapper');
+    const targetDropdownBtn = document.getElementById('target-dropdown-btn');
+    const targetDropdownMenu = document.getElementById('target-dropdown-menu');
+    const targetDropdownText = document.getElementById('target-dropdown-text');
+    const targetCountBadge = document.getElementById('target-count-badge');
+    const targetOptionsList = document.getElementById('target-options-list');
+    const closeTargetDropdownBtn = document.getElementById('close-target-dropdown-btn');
+    const dropdownSelectionCount = document.getElementById('dropdown-selection-count');
     const presetKthBtn = document.getElementById('preset-kth-btn');
     const presetSouthBtn = document.getElementById('preset-south-btn');
     const presetAllBtn = document.getElementById('preset-all-btn');
@@ -218,35 +225,96 @@ document.addEventListener('DOMContentLoaded', () => {
     modeYoutubeBtn.addEventListener('click', () => setMode('youtube'));
 
     // -------------------------------------------------------------------------
-    // MULTI-TARGET LANGUAGE SELECTION & PRESETS
+    // MULTI-TARGET LANGUAGE SELECTION DROPDOWN & PRESETS
     // -------------------------------------------------------------------------
-    function updateLanguageChipsUI() {
-        const chips = langChipsGrid.querySelectorAll('.lang-chip');
-        chips.forEach(chip => {
-            const code = chip.dataset.code;
-            if (selectedTargetLangs.includes(code)) {
-                chip.classList.add('selected');
-            } else {
-                chip.classList.remove('selected');
-            }
+    function toggleTargetDropdown(open) {
+        if (!targetDropdownMenu) return;
+        const willOpen = open !== undefined ? open : !targetDropdownMenu.classList.contains('is-open');
+        targetDropdownMenu.classList.toggle('is-open', willOpen);
+        if (targetDropdownBtn) {
+            targetDropdownBtn.setAttribute('aria-expanded', willOpen);
+            targetDropdownBtn.classList.toggle('active', willOpen);
+        }
+    }
+
+    if (targetDropdownBtn) {
+        targetDropdownBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleTargetDropdown();
         });
+    }
+
+    if (closeTargetDropdownBtn) {
+        closeTargetDropdownBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleTargetDropdown(false);
+        });
+    }
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+        if (targetDropdownWrapper && !targetDropdownWrapper.contains(e.target)) {
+            toggleTargetDropdown(false);
+        }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && targetDropdownMenu && targetDropdownMenu.classList.contains('is-open')) {
+            toggleTargetDropdown(false);
+        }
+    });
+
+    function updateLanguageChipsUI() {
+        // Sync checkboxes and option item active styles
+        if (targetOptionsList) {
+            const optionItems = targetOptionsList.querySelectorAll('.target-option-item');
+            optionItems.forEach(item => {
+                const code = item.dataset.code;
+                const checkbox = item.querySelector('.target-checkbox');
+                const isSelected = selectedTargetLangs.includes(code);
+                if (checkbox) checkbox.checked = isSelected;
+                item.classList.toggle('selected', isSelected);
+            });
+        }
 
         // Update presets active states
         const kth = ['kn', 'te', 'hi'];
         const south = ['kn', 'te', 'ta', 'ml'];
-        presetKthBtn.classList.toggle('active', arraysEqual(selectedTargetLangs, kth));
-        presetSouthBtn.classList.toggle('active', arraysEqual(selectedTargetLangs, south));
+        if (presetKthBtn) presetKthBtn.classList.toggle('active', arraysEqual(selectedTargetLangs, kth));
+        if (presetSouthBtn) presetSouthBtn.classList.toggle('active', arraysEqual(selectedTargetLangs, south));
+
+        const count = selectedTargetLangs.length;
+
+        // Update count badges
+        if (targetCountBadge) targetCountBadge.textContent = count;
+        if (dropdownSelectionCount) {
+            dropdownSelectionCount.textContent = count === 1 ? '1 language selected' : `${count} languages selected`;
+        }
+
+        // Format selected language names for dropdown trigger display
+        const names = selectedTargetLangs.map(c => LANGUAGE_NAMES[c]?.name || c);
+        let displayText = '';
+        if (count === 0) {
+            displayText = 'Select target languages...';
+        } else if (count <= 3) {
+            displayText = names.join(', ');
+        } else {
+            displayText = `${names.slice(0, 2).join(', ')} + ${count - 2} more`;
+        }
+        if (targetDropdownText) targetDropdownText.textContent = displayText;
 
         // Update summary badge
-        if (selectedTargetLangs.length === 0) {
-            selectedSummaryBadge.textContent = 'None selected (Click languages below)';
-        } else {
-            const names = selectedTargetLangs.map(c => LANGUAGE_NAMES[c]?.name || c).join(', ');
-            selectedSummaryBadge.textContent = `Selected (${selectedTargetLangs.length}): ${names}`;
+        if (selectedSummaryBadge) {
+            if (count === 0) {
+                selectedSummaryBadge.textContent = 'None selected';
+            } else {
+                selectedSummaryBadge.textContent = `Selected (${count}): ${names.join(', ')}`;
+            }
         }
 
         // If active tab is not in selected, default to first selected
-        if (!selectedTargetLangs.includes(activeTargetTab) && selectedTargetLangs.length > 0) {
+        if (!selectedTargetLangs.includes(activeTargetTab) && count > 0) {
             activeTargetTab = selectedTargetLangs[0];
         }
     }
@@ -258,52 +326,70 @@ document.addEventListener('DOMContentLoaded', () => {
         return sortedA.every((val, index) => val === sortedB[index]);
     }
 
-    // Chip Click Listener
-    langChipsGrid.addEventListener('click', (e) => {
-        const chip = e.target.closest('.lang-chip');
-        if (!chip) return;
-        const code = chip.dataset.code;
-        if (selectedTargetLangs.includes(code)) {
-            if (selectedTargetLangs.length > 1) {
-                selectedTargetLangs = selectedTargetLangs.filter(c => c !== code);
+    // Checkbox Change Listener (Multi-select via checkboxes inside dropdown)
+    if (targetOptionsList) {
+        targetOptionsList.addEventListener('change', (e) => {
+            const checkbox = e.target.closest('.target-checkbox');
+            if (!checkbox) return;
+            const code = checkbox.value;
+            if (checkbox.checked) {
+                if (!selectedTargetLangs.includes(code)) {
+                    selectedTargetLangs.push(code);
+                }
             } else {
-                showToast('At least one target language must remain selected.', 'info');
+                if (selectedTargetLangs.length > 1) {
+                    selectedTargetLangs = selectedTargetLangs.filter(c => c !== code);
+                } else {
+                    checkbox.checked = true; // Keep at least one selected
+                    showToast('At least one target language must remain selected.', 'info');
+                    return;
+                }
             }
-        } else {
-            selectedTargetLangs.push(code);
-        }
-        updateLanguageChipsUI();
-        if (Object.keys(currentTranslations).length > 0) {
-            renderTranslationsOutput();
-        }
-    });
+            updateLanguageChipsUI();
+            if (Object.keys(currentTranslations).length > 0) {
+                renderTranslationsOutput();
+            }
+        });
+    }
 
     // Preset Buttons
-    presetKthBtn.addEventListener('click', () => {
-        selectedTargetLangs = ['kn', 'te', 'hi'];
-        updateLanguageChipsUI();
-        showToast('Selected Kannada, Telugu, and Hindi!', 'success');
-        if (getSpeechText().trim()) translateAll();
-    });
+    if (presetKthBtn) {
+        presetKthBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            selectedTargetLangs = ['kn', 'te', 'hi'];
+            updateLanguageChipsUI();
+            showToast('Selected Kannada, Telugu, and Hindi!', 'success');
+            if (getSpeechText().trim()) translateAll();
+        });
+    }
 
-    presetSouthBtn.addEventListener('click', () => {
-        selectedTargetLangs = ['kn', 'te', 'ta', 'ml'];
-        updateLanguageChipsUI();
-        showToast('Selected South Indian languages (Kannada, Telugu, Tamil, Malayalam)!', 'success');
-        if (getSpeechText().trim()) translateAll();
-    });
+    if (presetSouthBtn) {
+        presetSouthBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            selectedTargetLangs = ['kn', 'te', 'ta', 'ml'];
+            updateLanguageChipsUI();
+            showToast('Selected South Indian languages (Kannada, Telugu, Tamil, Malayalam)!', 'success');
+            if (getSpeechText().trim()) translateAll();
+        });
+    }
 
-    presetAllBtn.addEventListener('click', () => {
-        selectedTargetLangs = ['kn', 'te', 'hi', 'ta', 'ml', 'mr', 'bn', 'gu', 'en', 'es'];
-        updateLanguageChipsUI();
-        showToast('Selected all 10 supported languages!', 'success');
-    });
+    if (presetAllBtn) {
+        presetAllBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            selectedTargetLangs = ['kn', 'te', 'hi', 'ta', 'ml', 'mr', 'bn', 'gu', 'en', 'es'];
+            updateLanguageChipsUI();
+            showToast('Selected all 10 supported languages!', 'success');
+        });
+    }
 
-    presetClearBtn.addEventListener('click', () => {
-        selectedTargetLangs = ['kn']; // Default to Kannada
-        updateLanguageChipsUI();
-        showToast('Reset target to Kannada.', 'info');
-    });
+    if (presetClearBtn) {
+        presetClearBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            selectedTargetLangs = ['kn']; // Default to Kannada
+            updateLanguageChipsUI();
+            showToast('Reset target to Kannada.', 'info');
+        });
+    }
 
     // Input Language Change
     inputLangSelect.addEventListener('change', () => {

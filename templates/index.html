@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DHVANI - Multilingual Speech Recognition, Video Transcription & Translation Studio</title>
     <!-- Pure Custom Stylesheet (No Bootstrap, No Tailwind) -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2026-v5-aesthetic">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2026-v6-dropdown">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -101,115 +101,183 @@
                         <span id="speech-code-tag" class="lang-code-hint">Speech Engine: en-US</span>
                     </div>
 
-                    <!-- Target Language Multi-Selection Area -->
+                    <!-- Target Language Multi-Selection Dropdown Area -->
                     <div class="target-lang-group">
                         <div class="target-bar-header">
-                            <div class="target-title-wrap">
+                            <label class="compact-label" id="target-dropdown-label">
                                 <span class="label-badge label-target">Target Language(s)</span>
-                                <span id="selected-summary-badge" class="selected-summary-badge">Selected (3): Kannada, Telugu, Hindi</span>
-                            </div>
+                            </label>
+                            <span id="selected-summary-badge" class="selected-summary-badge">Selected (3): Kannada, Telugu, Hindi</span>
+                        </div>
 
-                            <!-- 1-Click Presets -->
-                            <div class="preset-buttons-group">
-                                <span class="preset-tag-label">Presets:</span>
-                                <button type="button" id="preset-kth-btn" class="btn-preset active" title="Select Kannada, Telugu, and Hindi">
-                                    ⚡ Kannada + Telugu + Hindi
-                                </button>
-                                <button type="button" id="preset-south-btn" class="btn-preset" title="Select South Indian languages">
-                                    🌴 South Indian
-                                </button>
-                                <button type="button" id="preset-all-btn" class="btn-preset">
-                                    All
-                                </button>
-                                <button type="button" id="preset-clear-btn" class="btn-preset btn-preset-clear">
-                                    Reset
-                                </button>
+                        <!-- Dropdown Trigger & Popover Box -->
+                        <div class="target-dropdown-wrapper" id="target-dropdown-wrapper">
+                            <button type="button" id="target-dropdown-btn" class="target-dropdown-btn" aria-haspopup="true" aria-expanded="false" aria-labelledby="target-dropdown-label">
+                                <div class="target-dropdown-selected-display">
+                                    <span class="target-dropdown-icon">🌐</span>
+                                    <span id="target-dropdown-text" class="target-dropdown-text">Kannada, Telugu, Hindi</span>
+                                </div>
+                                <div class="target-dropdown-btn-right">
+                                    <span id="target-count-badge" class="target-count-badge">3</span>
+                                    <span class="dropdown-caret">▼</span>
+                                </div>
+                            </button>
+
+                            <!-- Multi-Select Dropdown Popover Menu -->
+                            <div id="target-dropdown-menu" class="target-dropdown-menu" role="menu" aria-label="Target Languages Selection">
+                                <!-- Top Bar inside Dropdown: Quick 1-Click Presets -->
+                                <div class="dropdown-presets-strip">
+                                    <span class="preset-tag-label">Presets:</span>
+                                    <div class="preset-buttons-group">
+                                        <button type="button" id="preset-kth-btn" class="btn-preset active" title="Select Kannada, Telugu, and Hindi">
+                                            ⚡ Kannada + Telugu + Hindi
+                                        </button>
+                                        <button type="button" id="preset-south-btn" class="btn-preset" title="Select South Indian languages">
+                                            🌴 South Indian
+                                        </button>
+                                        <button type="button" id="preset-all-btn" class="btn-preset">
+                                            All
+                                        </button>
+                                        <button type="button" id="preset-clear-btn" class="btn-preset btn-preset-clear">
+                                            Reset
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="dropdown-menu-divider"></div>
+
+                                <!-- Checkbox Options List -->
+                                <div class="target-options-list" id="target-options-list">
+                                    <label class="target-option-item selected" data-code="kn">
+                                        <input type="checkbox" class="target-checkbox" value="kn" checked>
+                                        <span class="custom-checkbox-box">
+                                            <svg class="check-icon" viewBox="0 0 12 10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="1.5 5 4.5 8 10.5 2"></polyline>
+                                            </svg>
+                                        </span>
+                                        <span class="option-flag">🇮🇳</span>
+                                        <span class="option-name">Kannada</span>
+                                        <span class="option-native">(ಕನ್ನಡ)</span>
+                                    </label>
+
+                                    <label class="target-option-item selected" data-code="te">
+                                        <input type="checkbox" class="target-checkbox" value="te" checked>
+                                        <span class="custom-checkbox-box">
+                                            <svg class="check-icon" viewBox="0 0 12 10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="1.5 5 4.5 8 10.5 2"></polyline>
+                                            </svg>
+                                        </span>
+                                        <span class="option-flag">🇮🇳</span>
+                                        <span class="option-name">Telugu</span>
+                                        <span class="option-native">(తెలుగు)</span>
+                                    </label>
+
+                                    <label class="target-option-item selected" data-code="hi">
+                                        <input type="checkbox" class="target-checkbox" value="hi" checked>
+                                        <span class="custom-checkbox-box">
+                                            <svg class="check-icon" viewBox="0 0 12 10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="1.5 5 4.5 8 10.5 2"></polyline>
+                                            </svg>
+                                        </span>
+                                        <span class="option-flag">🇮🇳</span>
+                                        <span class="option-name">Hindi</span>
+                                        <span class="option-native">(हिन्दी)</span>
+                                    </label>
+
+                                    <label class="target-option-item" data-code="ta">
+                                        <input type="checkbox" class="target-checkbox" value="ta">
+                                        <span class="custom-checkbox-box">
+                                            <svg class="check-icon" viewBox="0 0 12 10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="1.5 5 4.5 8 10.5 2"></polyline>
+                                            </svg>
+                                        </span>
+                                        <span class="option-flag">🇮🇳</span>
+                                        <span class="option-name">Tamil</span>
+                                        <span class="option-native">(தமிழ்)</span>
+                                    </label>
+
+                                    <label class="target-option-item" data-code="ml">
+                                        <input type="checkbox" class="target-checkbox" value="ml">
+                                        <span class="custom-checkbox-box">
+                                            <svg class="check-icon" viewBox="0 0 12 10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="1.5 5 4.5 8 10.5 2"></polyline>
+                                            </svg>
+                                        </span>
+                                        <span class="option-flag">🇮🇳</span>
+                                        <span class="option-name">Malayalam</span>
+                                        <span class="option-native">(മലയാളം)</span>
+                                    </label>
+
+                                    <label class="target-option-item" data-code="mr">
+                                        <input type="checkbox" class="target-checkbox" value="mr">
+                                        <span class="custom-checkbox-box">
+                                            <svg class="check-icon" viewBox="0 0 12 10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="1.5 5 4.5 8 10.5 2"></polyline>
+                                            </svg>
+                                        </span>
+                                        <span class="option-flag">🇮🇳</span>
+                                        <span class="option-name">Marathi</span>
+                                        <span class="option-native">(मराठी)</span>
+                                    </label>
+
+                                    <label class="target-option-item" data-code="bn">
+                                        <input type="checkbox" class="target-checkbox" value="bn">
+                                        <span class="custom-checkbox-box">
+                                            <svg class="check-icon" viewBox="0 0 12 10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="1.5 5 4.5 8 10.5 2"></polyline>
+                                            </svg>
+                                        </span>
+                                        <span class="option-flag">🇮🇳</span>
+                                        <span class="option-name">Bengali</span>
+                                        <span class="option-native">(বাংলা)</span>
+                                    </label>
+
+                                    <label class="target-option-item" data-code="gu">
+                                        <input type="checkbox" class="target-checkbox" value="gu">
+                                        <span class="custom-checkbox-box">
+                                            <svg class="check-icon" viewBox="0 0 12 10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="1.5 5 4.5 8 10.5 2"></polyline>
+                                            </svg>
+                                        </span>
+                                        <span class="option-flag">🇮🇳</span>
+                                        <span class="option-name">Gujarati</span>
+                                        <span class="option-native">(ગુજરાતી)</span>
+                                    </label>
+
+                                    <label class="target-option-item" data-code="en">
+                                        <input type="checkbox" class="target-checkbox" value="en">
+                                        <span class="custom-checkbox-box">
+                                            <svg class="check-icon" viewBox="0 0 12 10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="1.5 5 4.5 8 10.5 2"></polyline>
+                                            </svg>
+                                        </span>
+                                        <span class="option-flag">🌐</span>
+                                        <span class="option-name">English</span>
+                                        <span class="option-native">(English)</span>
+                                    </label>
+
+                                    <label class="target-option-item" data-code="es">
+                                        <input type="checkbox" class="target-checkbox" value="es">
+                                        <span class="custom-checkbox-box">
+                                            <svg class="check-icon" viewBox="0 0 12 10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="1.5 5 4.5 8 10.5 2"></polyline>
+                                            </svg>
+                                        </span>
+                                        <span class="option-flag">🇪🇸</span>
+                                        <span class="option-name">Spanish</span>
+                                        <span class="option-native">(Español)</span>
+                                    </label>
+                                </div>
+
+                                <!-- Footer inside Dropdown -->
+                                <div class="dropdown-footer-bar">
+                                    <span id="dropdown-selection-count" class="dropdown-selection-count">3 languages selected</span>
+                                    <button type="button" id="close-target-dropdown-btn" class="btn-dropdown-done">Done</button>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Language Chips Grid -->
-                        <div class="lang-chips-grid" id="lang-chips-grid">
-                            <button type="button" class="lang-chip selected" data-code="kn">
-                                <span class="chip-flag">🇮🇳</span>
-                                <span class="chip-label">
-                                    <span class="chip-name">Kannada</span>
-                                    <span class="chip-native">(ಕನ್ನಡ)</span>
-                                </span>
-                                <span class="chip-check">✓</span>
-                            </button>
-                            <button type="button" class="lang-chip selected" data-code="te">
-                                <span class="chip-flag">🇮🇳</span>
-                                <span class="chip-label">
-                                    <span class="chip-name">Telugu</span>
-                                    <span class="chip-native">(తెలుగు)</span>
-                                </span>
-                                <span class="chip-check">✓</span>
-                            </button>
-                            <button type="button" class="lang-chip selected" data-code="hi">
-                                <span class="chip-flag">🇮🇳</span>
-                                <span class="chip-label">
-                                    <span class="chip-name">Hindi</span>
-                                    <span class="chip-native">(हिन्दी)</span>
-                                </span>
-                                <span class="chip-check">✓</span>
-                            </button>
-                            <button type="button" class="lang-chip" data-code="ta">
-                                <span class="chip-flag">🇮🇳</span>
-                                <span class="chip-label">
-                                    <span class="chip-name">Tamil</span>
-                                    <span class="chip-native">(தமிழ்)</span>
-                                </span>
-                                <span class="chip-check">✓</span>
-                            </button>
-                            <button type="button" class="lang-chip" data-code="ml">
-                                <span class="chip-flag">🇮🇳</span>
-                                <span class="chip-label">
-                                    <span class="chip-name">Malayalam</span>
-                                    <span class="chip-native">(മലയാളം)</span>
-                                </span>
-                                <span class="chip-check">✓</span>
-                            </button>
-                            <button type="button" class="lang-chip" data-code="mr">
-                                <span class="chip-flag">🇮🇳</span>
-                                <span class="chip-label">
-                                    <span class="chip-name">Marathi</span>
-                                    <span class="chip-native">(मराठी)</span>
-                                </span>
-                                <span class="chip-check">✓</span>
-                            </button>
-                            <button type="button" class="lang-chip" data-code="bn">
-                                <span class="chip-flag">🇮🇳</span>
-                                <span class="chip-label">
-                                    <span class="chip-name">Bengali</span>
-                                    <span class="chip-native">(বাংলা)</span>
-                                </span>
-                                <span class="chip-check">✓</span>
-                            </button>
-                            <button type="button" class="lang-chip" data-code="gu">
-                                <span class="chip-flag">🇮🇳</span>
-                                <span class="chip-label">
-                                    <span class="chip-name">Gujarati</span>
-                                    <span class="chip-native">(ગુજરાતી)</span>
-                                </span>
-                                <span class="chip-check">✓</span>
-                            </button>
-                            <button type="button" class="lang-chip" data-code="en">
-                                <span class="chip-flag">🌐</span>
-                                <span class="chip-label">
-                                    <span class="chip-name">English</span>
-                                    <span class="chip-native">(English)</span>
-                                </span>
-                                <span class="chip-check">✓</span>
-                            </button>
-                            <button type="button" class="lang-chip" data-code="es">
-                                <span class="chip-flag">🇪🇸</span>
-                                <span class="chip-label">
-                                    <span class="chip-name">Spanish</span>
-                                    <span class="chip-native">(Español)</span>
-                                </span>
-                                <span class="chip-check">✓</span>
-                            </button>
-                        </div>
+                        <span class="lang-code-hint">Multi-select dropdown • Translates simultaneously</span>
                     </div>
                 </div>
             </section>
@@ -567,6 +635,6 @@
     </div>
 
     <!-- Application Controller Script -->
-    <script src="{{ url_for('static', filename='js/script.js') }}?v=2026-v5-aesthetic"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}?v=2026-v6-dropdown"></script>
 </body>
 </html>
