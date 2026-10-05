@@ -16,10 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const processingTitle = document.getElementById('processing-title');
     const processingSubtitle = document.getElementById('processing-subtitle');
 
-    // Theme Toggle Elements
+    // Theme Toggle Button
     const themeToggleBtn = document.getElementById('theme-toggle-btn');
-    const themeToggleIcon = document.getElementById('theme-toggle-icon');
-    const themeToggleLabel = document.getElementById('theme-toggle-label');
 
     // Mode Switcher Elements
     const modeMicBtn = document.getElementById('mode-mic-btn');
@@ -235,14 +233,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function setTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem('dhvani_theme', theme);
-        if (themeToggleIcon && themeToggleLabel) {
-            if (theme === 'dark') {
-                themeToggleIcon.textContent = '☀️';
-                themeToggleLabel.textContent = 'Light Mode';
-            } else {
-                themeToggleIcon.textContent = '🌙';
-                themeToggleLabel.textContent = 'Dark Mode';
-            }
+        if (themeToggleBtn) {
+            const isDark = theme === 'dark';
+            themeToggleBtn.setAttribute('title', isDark ? 'Switch to Light Theme' : 'Switch to Dark Theme');
+            themeToggleBtn.setAttribute('aria-label', isDark ? 'Switch to Light Theme' : 'Switch to Dark Theme');
         }
     }
 
